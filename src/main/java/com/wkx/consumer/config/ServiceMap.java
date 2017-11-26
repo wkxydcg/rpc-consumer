@@ -1,13 +1,10 @@
 package com.wkx.consumer.config;
 
-import lombok.Data;
-import lombok.experimental.Accessors;
-
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ApiMap {
+public class ServiceMap {
 
     private static Map<String,List<String>> serviceMap=new ConcurrentHashMap<>();
 

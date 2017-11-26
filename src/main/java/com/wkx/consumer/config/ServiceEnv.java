@@ -5,7 +5,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AppConfigurer implements EnvironmentAware{
+public class ServiceEnv implements EnvironmentAware{
 
     private static Environment environment;
 

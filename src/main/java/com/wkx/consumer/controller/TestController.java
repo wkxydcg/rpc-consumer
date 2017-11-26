@@ -3,6 +3,7 @@ package com.wkx.consumer.controller;
 import com.wkx.consumer.api.TestApi;
 import com.wkx.consumer.config.BeanFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
