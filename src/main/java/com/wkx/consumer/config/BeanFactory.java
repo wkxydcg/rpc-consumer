@@ -1,19 +1,12 @@
 package com.wkx.consumer.config;
 
-import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.stereotype.Component;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
 
-@Component
-public class BeanFactory implements ApplicationContextAware {
+public class BeanFactory implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
     private static ApplicationContext context;
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        context = applicationContext;
-    }
 
     public static Object getBean(String name) {
         return context.getBean(name);
@@ -23,4 +16,8 @@ public class BeanFactory implements ApplicationContextAware {
         return context.getBean(c);
     }
 
+    @Override
+    public void initialize(ConfigurableApplicationContext applicationContext) {
+        context = applicationContext;
+    }
 }

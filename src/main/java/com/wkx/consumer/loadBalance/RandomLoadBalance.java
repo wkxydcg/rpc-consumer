@@ -1,14 +1,12 @@
 package com.wkx.consumer.loadBalance;
 
 import com.wkx.consumer.config.ServiceMap;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
-@Component
 public class RandomLoadBalance implements LoadBalance{
 
     public String getRequestUrl(String serviceId){
@@ -20,7 +18,7 @@ public class RandomLoadBalance implements LoadBalance{
         if(serviceList==null||serviceList.size()==0){
             throw new RuntimeException("找不到相关服务");
         }
-        int index=ThreadLocalRandom.current().nextInt(serviceList.size()-1);
+        int index=ThreadLocalRandom.current().nextInt(serviceList.size())-1;
         return "http://"+serviceList.get(index);
     }
 

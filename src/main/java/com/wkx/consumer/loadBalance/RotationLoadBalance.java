@@ -1,16 +1,12 @@
 package com.wkx.consumer.loadBalance;
 
 import com.wkx.consumer.config.ServiceMap;
-import org.springframework.context.annotation.Primary;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@Component
-@Primary
 public class RotationLoadBalance implements LoadBalance{
 
     private AtomicInteger requestNum=new AtomicInteger(0);

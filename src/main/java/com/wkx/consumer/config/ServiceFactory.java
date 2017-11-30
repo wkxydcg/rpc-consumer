@@ -4,11 +4,10 @@ import com.wkx.consumer.annotation.ServiceId;
 import com.wkx.consumer.request.ServiceClient;
 import org.I0Itec.zkclient.ZkClient;
 import org.reflections.Reflections;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.stereotype.Component;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Proxy;
 import java.util.List;
@@ -16,18 +15,17 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Component
-public class ServiceFactory implements ApplicationContextAware {
+public class ServiceFactory implements ApplicationContextInitializer{
 
-    private static ApplicationContext context;
+    private static ConfigurableApplicationContext context;
 
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+    public void initialize(ConfigurableApplicationContext applicationContext){
         context = applicationContext;
         Reflections reflections=new Reflections("");
         Set<Class<?>> annotated= reflections.getTypesAnnotatedWith(ServiceId.class);
         Set<String> serviceList=annotated.stream().map(c-> "/"+c.getAnnotation(ServiceId.class).serviceName()).collect(Collectors.toSet());
         String zkServers= ServiceEnv.getProperty("zookeeper.servers");
+        if(StringUtils.isEmpty(zkServers)) return;
         ZkClient zkClient=new ZkClient(zkServers);
         Map<String,List<String>> serviceMap= ServiceMap.getServiceMap();
         for (String service:serviceList){
@@ -42,7 +40,7 @@ public class ServiceFactory implements ApplicationContextAware {
             String beanName=getBeanName(c);
             ServiceFactory.registerBean(beanName,obj);
         });
-        ServiceFactory.registerBean("zkClient",zkClient);
+        registerBean("zkClient",zkClient);
     }
 
     @SuppressWarnings("unchecked")
@@ -65,7 +63,8 @@ public class ServiceFactory implements ApplicationContextAware {
     }
 
     private static void registerBean(String name, Object obj) {
-        DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) context.getAutowireCapableBeanFactory();
+        DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) context.getBeanFactory();
         beanFactory.registerSingleton(name,obj);
     }
+
 }
