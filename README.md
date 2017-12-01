@@ -42,6 +42,11 @@ public class TestController {
 }
 ```
 
+### 注解使用
+@ServiceId 远程服务明名
+@GetPath get方式请求远程服务 参数:path(url相对路径)
+@PostPath post方式请求远程服务 参数:path(url相对路径)
+
 
 
 
