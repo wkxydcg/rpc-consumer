@@ -14,8 +14,10 @@ import com.wkx.consumer.annotation.ServiceId;
 
 @ServiceId(serviceName="test")
 public interface TestApi {
+
     @GetPath(path = "/hello")
     String getHello();
+    
 }
 
 controller层调用：
@@ -25,16 +27,17 @@ import com.wkx.rpc.consumerdemo.api.TestApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 @RestController
 @RequestMapping("/hello")
 public class TestController {
+
     @Autowired
     private TestApi testApi;
     @RequestMapping("/test")
     public String helloWorld(){
         return testApi.getHello();
     }
+    
 }
 
 
