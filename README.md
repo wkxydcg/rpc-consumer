@@ -1,12 +1,14 @@
 # rpc-consumer
 一个简单版本的rpc框架客户端 基于http 协议 使用zookeeper作为注册中心 
+
+## 配置
 application.properties配置
 zookeeper.servers=${host1}:${port1},${host2}:${port2}
 
 ## 使用demo
-API定义：
-package com.wkx.rpc.consumerdemo.api;
+API定义:
 
+package com.wkx.rpc.consumerdemo.api;
 import com.wkx.consumer.annotation.GetPath;
 import com.wkx.consumer.annotation.ServiceId;
 
@@ -16,9 +18,10 @@ public interface TestApi {
     @GetPath(path = "/hello")
     String getHello();
 }
-使用：
-package com.wkx.rpc.consumerdemo.controller;
 
+使用：
+
+package com.wkx.rpc.consumerdemo.controller;
 import com.wkx.rpc.consumerdemo.api.TestApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
