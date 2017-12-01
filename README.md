@@ -14,12 +14,11 @@ import com.wkx.consumer.annotation.ServiceId;
 
 @ServiceId(serviceName="test")
 public interface TestApi {
-
     @GetPath(path = "/hello")
     String getHello();
 }
 
-使用：
+controller层调用：
 
 package com.wkx.rpc.consumerdemo.controller;
 import com.wkx.rpc.consumerdemo.api.TestApi;
@@ -30,10 +29,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/hello")
 public class TestController {
-
     @Autowired
     private TestApi testApi;
-
     @RequestMapping("/test")
     public String helloWorld(){
         return testApi.getHello();
