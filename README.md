@@ -7,7 +7,7 @@ zookeeper.servers=${host1}:${port1},${host2}:${port2}
 
 ## 使用demo
 API定义:
-
+```
 package com.wkx.rpc.consumerdemo.api;
 import com.wkx.consumer.annotation.GetPath;
 import com.wkx.consumer.annotation.ServiceId;
@@ -19,9 +19,10 @@ public interface TestApi {
     String getHello();
     
 }
+```
 
 controller层调用：
-
+```
 package com.wkx.rpc.consumerdemo.controller;
 import com.wkx.rpc.consumerdemo.api.TestApi;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,7 @@ public class TestController {
     }
     
 }
-
+```
 
 
 
