@@ -46,6 +46,7 @@ public class TestController {
 @ServiceId 远程服务明名</br>
 @GetPath get方式请求远程服务 参数:path(url相对路径)</br>
 @PostPath post方式请求远程服务 参数:path(url相对路径)</br>
+@BodyKey 指明请求参数的key值</br>
 
 ### 负载说明
 提供两种负载模式 轮循和随机
