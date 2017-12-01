@@ -42,12 +42,16 @@ public class TestController {
 }
 ```
 
-### 注解使用
+### 注解说明
 @ServiceId 远程服务明名</br>
 @GetPath get方式请求远程服务 参数:path(url相对路径)</br>
 @PostPath post方式请求远程服务 参数:path(url相对路径)</br>
 
-
+### 负载说明
+提供两种负载模式 轮循和随机
+默认采用轮循
+若想采用随机的方式
+将RotationLoadBalance 注入spring容器即可
 
 
 
