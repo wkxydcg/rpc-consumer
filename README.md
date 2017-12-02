@@ -12,10 +12,10 @@ package com.wkx.rpc.consumerdemo.api;
 import com.wkx.consumer.annotation.GetPath;
 import com.wkx.consumer.annotation.ServiceId;
 
-@ServiceId(serviceName="test")
+@RpcConsumer(serviceName="test")
 public interface TestApi {
 
-    @GetPath(path = "/hello")
+    @Path(url = "/hello")
     String getHello();
     
 }
