@@ -1,6 +1,6 @@
 package com.wkx.consumer.loadBalance;
 
-import com.wkx.consumer.config.ServiceMap;
+import com.wkx.consumer.config.RpcServiceHolder;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
@@ -13,7 +13,7 @@ public class RotationLoadBalance implements LoadBalance{
 
     public String getRequestUrl(String serviceId){
         int index=requestNum.addAndGet(1)-1;
-        Map<String,List<String>> map= ServiceMap.getServiceMap();
+        Map<String,List<String>> map= RpcServiceHolder.getServiceMap();
         if(StringUtils.isEmpty(serviceId)){
             throw new RuntimeException("serviceId 不可为空");
         }

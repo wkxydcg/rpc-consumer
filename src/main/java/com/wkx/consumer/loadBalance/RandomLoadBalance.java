@@ -1,6 +1,6 @@
 package com.wkx.consumer.loadBalance;
 
-import com.wkx.consumer.config.ServiceMap;
+import com.wkx.consumer.config.RpcServiceHolder;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class RandomLoadBalance implements LoadBalance{
 
     public String getRequestUrl(String serviceId){
-        Map<String,List<String>> map= ServiceMap.getServiceMap();
+        Map<String,List<String>> map= RpcServiceHolder.getServiceMap();
         if(StringUtils.isEmpty(serviceId)){
             throw new RuntimeException("serviceId 不可为空");
         }

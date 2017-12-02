@@ -1,6 +1,7 @@
 package com.wkx.consumer.config;
 
-import com.wkx.consumer.annotation.ServiceId;
+import com.wkx.consumer.annotation.RpcConsumer;
+import com.wkx.consumer.env.ServiceEnv;
 import com.wkx.consumer.request.ServiceClient;
 import org.I0Itec.zkclient.ZkClient;
 import org.reflections.Reflections;
@@ -15,19 +16,19 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class ServiceFactory implements ApplicationContextInitializer{
+public class RpcServiceFactory implements ApplicationContextInitializer{
 
     private static ConfigurableApplicationContext context;
 
     public void initialize(ConfigurableApplicationContext applicationContext){
         context = applicationContext;
         Reflections reflections=new Reflections("");
-        Set<Class<?>> annotated= reflections.getTypesAnnotatedWith(ServiceId.class);
-        Set<String> serviceList=annotated.stream().map(c-> "/"+c.getAnnotation(ServiceId.class).serviceName()).collect(Collectors.toSet());
+        Set<Class<?>> annotated= reflections.getTypesAnnotatedWith(RpcConsumer.class);
+        Set<String> serviceList=annotated.stream().map(c-> "/"+c.getAnnotation(RpcConsumer.class).serviceName()).collect(Collectors.toSet());
         String zkServers= ServiceEnv.getProperty("zookeeper.servers");
         if(StringUtils.isEmpty(zkServers)) return;
         ZkClient zkClient=new ZkClient(zkServers);
-        Map<String,List<String>> serviceMap= ServiceMap.getServiceMap();
+        Map<String,List<String>> serviceMap= RpcServiceHolder.getServiceMap();
         for (String service:serviceList){
             if(zkClient.exists(service)){
                 List<String> pathList=zkClient.getChildren(service);
@@ -38,7 +39,7 @@ public class ServiceFactory implements ApplicationContextInitializer{
         annotated.forEach(c-> {
             Object obj= getProxy(c);
             String beanName=getBeanName(c);
-            ServiceFactory.registerBean(beanName,obj);
+            RpcServiceFactory.registerBean(beanName,obj);
         });
         registerBean("zkClient",zkClient);
     }
@@ -51,7 +52,7 @@ public class ServiceFactory implements ApplicationContextInitializer{
             if("toString".equals(method.getName())){
                 return getBeanName(subInterface);
             }
-            String serviceName=((ServiceId)subInterface.getAnnotation(ServiceId.class)).serviceName();
+            String serviceName=((RpcConsumer)subInterface.getAnnotation(RpcConsumer.class)).serviceName();
             return ServiceClient.execute(serviceName,method,args);
         });
     }

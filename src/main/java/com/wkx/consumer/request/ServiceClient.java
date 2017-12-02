@@ -1,11 +1,9 @@
 package com.wkx.consumer.request;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.wkx.consumer.annotation.BodyKey;
-import com.wkx.consumer.annotation.GetPath;
-import com.wkx.consumer.annotation.PostPath;
-import com.wkx.consumer.config.BeanFactory;
+import com.wkx.consumer.annotation.Path;
+import com.wkx.consumer.util.BeanFactory;
 import com.wkx.consumer.loadBalance.LoadBalance;
 import com.wkx.consumer.util.ClassUtils;
 import org.apache.http.HttpResponse;
@@ -19,7 +17,6 @@ import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -35,43 +32,24 @@ public class ServiceClient {
     }
 
     public static Object execute(String serviceName, Method method,Object [] args){
-        GetPath getPath=method.getAnnotation(GetPath.class);
-        PostPath postPath=method.getAnnotation(PostPath.class);
-        if(getPath!=null&&postPath!=null){
-            throw new RuntimeException("注解使用错误");
-        }
+        Path requestPath=method.getAnnotation(Path.class);
         Class returnType=method.getReturnType();
-        if(getPath!=null){
-            String url=loadBalance.getRequestUrl(serviceName)+getPath.path();
+        if(args==null||args.length==0){
+            String url=loadBalance.getRequestUrl(serviceName)+requestPath.url();
             HttpGet httpGet=new HttpGet(url);
             return executeGet(httpGet,returnType);
         }else{
-            String url=loadBalance.getRequestUrl(serviceName)+postPath.path();
+            String url=loadBalance.getRequestUrl(serviceName)+requestPath.url();
             HttpPost httpPost=new HttpPost(url);
-            JSON requestJson=new JSONObject();
-            if(args!=null&&args.length==1){
-                if(args[0].getClass().isArray()){
-                    requestJson=JSONObject.parseArray(JSONObject.toJSONString(args[0]));
+            JSONArray requestJson=new JSONArray();
+            for (Object obj:args){
+                if(ClassUtils.checkIsBaseClass(obj.getClass())){
+                    JSONObject json=new JSONObject();
+                    json.put(obj.getClass().getName(),obj);
+                    requestJson.add(json);
                 }else{
-                    requestJson=JSONObject.parseObject(JSONObject.toJSONString(args[0]));
+                    requestJson.add(JSONObject.parseObject(JSONObject.toJSONString(obj)));
                 }
-            }else if(args!=null){
-                JSONObject jsonObject=new JSONObject();
-                Annotation[][] annotations=method.getParameterAnnotations();
-                int index=0;
-                String key;
-                Object value;
-                for (Annotation[] annotation1 : annotations) {
-                    for (Annotation annotation : annotation1) {
-                        if (annotation.annotationType() == BodyKey.class) {
-                            key = ((BodyKey) annotation).value();
-                            value = args[index];
-                            jsonObject.put(key, value);
-                        }
-                        index++;
-                    }
-                }
-                requestJson=jsonObject;
             }
             try {
                 StringEntity entity=new StringEntity(requestJson.toJSONString());

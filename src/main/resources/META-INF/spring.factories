@@ -1,6 +1,6 @@
 org.springframework.context.ApplicationContextInitializer=\
-com.wkx.consumer.config.ServiceEnv,\
-com.wkx.consumer.config.BeanFactory,\
-com.wkx.consumer.config.ServiceFactory
+com.wkx.consumer.env.ServiceEnv,\
+com.wkx.consumer.util.BeanFactory,\
+com.wkx.consumer.config.RpcServiceFactory
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 com.wkx.consumer.config.LoadBalanceConfig

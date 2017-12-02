@@ -10,6 +10,7 @@ public class ClassUtils {
         baseClassSet=new HashSet<>();
         baseClassSet.add(String.class);
         baseClassSet.add(byte.class);
+        baseClassSet.add(Byte.class);
         baseClassSet.add(short.class);
         baseClassSet.add(int.class);
         baseClassSet.add(long.class);
@@ -17,8 +18,6 @@ public class ClassUtils {
         baseClassSet.add(double.class);
         baseClassSet.add(boolean.class);
         baseClassSet.add(Boolean.class);
-        baseClassSet.add(Byte.class);
-        baseClassSet.add(Number.class);
     }
 
     public static boolean checkIsBaseClass(Class cs){

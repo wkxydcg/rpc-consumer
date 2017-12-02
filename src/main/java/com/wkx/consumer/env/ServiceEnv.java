@@ -1,4 +1,4 @@
-package com.wkx.consumer.config;
+package com.wkx.consumer.env;
 
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
