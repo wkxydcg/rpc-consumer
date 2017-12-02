@@ -43,10 +43,8 @@ public class TestController {
 ```
 
 ### 注解说明
-@ServiceId 远程服务明名</br>
-@GetPath get方式请求远程服务 参数:path(url相对路径)</br>
-@PostPath post方式请求远程服务 参数:path(url相对路径)</br>
-@BodyKey 指明请求参数的key值,多参数时使用 单个参数不生效 单个参数时候会将单参数默认转化为json对象</br>
+@RpcConsumer 远程服务明名</br>
+@Path 请求远程服务 参数:url(url相对路径)</br>
 
 ### 负载说明
 提供两种负载模式 轮循和随机
